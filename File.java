@@ -31,8 +31,6 @@ class File {
     this.modified_time = getDateTime();
   }
 
-  // TODO: Check the display info of the time
-
   /**
    * Gets the time a file is created
    * 

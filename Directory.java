@@ -44,10 +44,15 @@ class Directory extends File {
    * Deletes a file/directory
    * 
    * @param name the file/directory to be deleted
+   * @throws Exception if the file/directory is not found
    */
-  public void delete(String name) {
-    container.remove(name);
-    count--;
+  public void delete(String name) throws Exception {
+    if (container.containsKey(name)) {
+      container.remove(name);
+      count--;
+    } else {
+      throw new Exception("file/directory not found");
+    }
   }
 
   /**
@@ -55,10 +60,15 @@ class Directory extends File {
    * 
    * @param name the name of the file/directory to be found
    * 
-   * @return the file/directory if found, null if otherwise
+   * @return the file/directory if found
+   * @throws Exception if the file/directory is not found
    */
-  public File find(String name) {
-    return container.get(name);
+  public File find(String name) throws Exception {
+    if (container.containsKey(name)) {
+      return container.get(name);
+    } else {
+      throw new Exception("file/directory not found");
+    }
   }
 
   /**

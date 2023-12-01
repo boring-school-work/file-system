@@ -36,6 +36,7 @@ class Directory extends File {
    * @param file the file/directory to be added
    */
   public void add(File file) {
+    file.upModified_time();
     container.put(file.getName(), file);
     count++;
   }

@@ -61,6 +61,7 @@ class Main {
     String choice = input.nextLine();
 
     if (choice.equalsIgnoreCase("Y")) {
+      System.out.println("List of available directories:");
       tree.listDir();
       System.out.print("Enter the name of the directory: ");
       String dirName = input.nextLine();
@@ -134,19 +135,20 @@ class Main {
     while (true) {
       System.out.println();
       System.out.println("--------------------------------------------------------------------------");
-      System.out.println("-----------------------Task Management System Menu------------------------");
-      System.out.println("----------------------------1. Create file--------------------------------");
-      System.out.println("----------------------------2. Create Folder------------------------------");
-      System.out.println("----------------------------3. Delete file or Folder ---------------------");
-      System.out.println("----------------------------4. Move File or Folder to Specific location---");
-      System.out.println("----------------------------5. Search File--------------------------------");
-      System.out.println("----------------------------6. View File tree-----------------------------");
-      System.out.println("----------------------------7. Quit---------------------------------------");
+      System.out.println("------------------ Virtual File System Organiser --------------");
+      System.out.println("--------------------------- 1. Create file -------------------------------");
+      System.out.println("--------------------------- 2. Create Folder -----------------------------");
+      System.out.println("--------------------------- 3. Delete file or Folder ---------------------");
+      System.out.println("--------------------------- 4. Move File or Folder to Specific location --");
+      System.out.println("--------------------------- 5. Search File -------------------------------");
+      System.out.println("--------------------------- 6. View File tree ----------------------------");
+      System.out.println("--------------------------- 7. Print detailed File Tree ------------------");
+      System.out.println("--------------------------- 8. Quit---------------------------------------");
       System.out.println("--------------------------------------------------------------------------");
       System.out.println();
 
       // Get user's choice
-      System.out.println("Enter your choice (1/2/3/4/5/6/7): ");
+      System.out.println("Enter your choice (1/2/3/4/5/6/7/8): ");
       Scanner input = new Scanner(System.in);
       int choice = input.nextInt();
       input.nextLine();
@@ -178,8 +180,10 @@ class Main {
             // View the file tree
             tree.printFileTree();
             break;
-
           case 7:
+            tree.printDetailedFileTree();
+            break;
+          case 8:
             // Exit the program
             input.close();
             System.exit(0);

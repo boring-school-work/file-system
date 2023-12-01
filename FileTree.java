@@ -223,6 +223,13 @@ class FileTree<T extends File> {
     }
   }
 
+  /**
+   * Checks if a file exists in the file system.
+   * 
+   * @param name the name of the file.
+   * @return true if the file exists, false otherwise.
+   * @throws Exception if the file is not found.
+   */
   public boolean chkFileExists(String name) throws Exception {
     for (T file : tree.values()) {
       if (dfsSearch(file, name, null)) {
@@ -238,6 +245,7 @@ class FileTree<T extends File> {
    * 
    * @param filename the name of the file/directory to move.
    * @param dirName  the name of the destination directory.
+   * @throws Exception if the file/directory does not exist.
    */
   public void move(String filename, String dirName) throws Exception {
     if (!chkFileExists(filename)) {
@@ -255,5 +263,37 @@ class FileTree<T extends File> {
     // add the file/directory to the destination directory
     Directory dir = (Directory) dirs.get(dirName);
     dir.add(new File(filename));
+  }
+
+  /**
+   * Prints the files/directories with their respective
+   * indentation in the file system tree as well as their metadata.
+   * 
+   * @param file   the file/directory to be displayed
+   * @param indent the indentation level of the file/directory
+   */
+  private void printMeta(File file, String indent) {
+    if (indent.length() > 0) {
+      System.out.print("|");
+    }
+
+    System.out.print(indent + "|-- ");
+    file.info();
+
+    // recursively print the files/directories in the current directory
+    if (file.Is_dir()) {
+      for (File f : ((Directory) file).getContainer()) {
+        printMeta(f, indent + " ".repeat(4));
+      }
+    }
+  }
+
+  /**
+   * Prints the file system tree as well as the metadata of the files/directories.
+   */
+  public void printDetailedFileTree() {
+    for (File file : tree.values()) {
+      printMeta(file, "");
+    }
   }
 }

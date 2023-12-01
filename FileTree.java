@@ -24,6 +24,55 @@ class FileTree<T extends File> {
    */
   public FileTree() {
     tree = new TreeMap<>();
+    dirs = new HashMap<>();
+  }
+
+  /**
+   * Adds a new directory to the dir list
+   * 
+   * @param dir the directory to be added
+   */
+  public void addDir(Directory dir) {
+    dirs.put(dir.getName(), dir);
+  }
+
+  /**
+   * Gets the size of the directory list
+   * 
+   * @return the size of the directory list
+   */
+  public int getDirSize() {
+    return dirs.size();
+  }
+
+  /**
+   * Checks if the directory exists
+   * 
+   * @param name the name of the directory
+   * @return true if the directory exists, false otherwise
+   */
+  public boolean dirExists(String name) {
+    return dirs.containsKey(name);
+  }
+
+  /**
+   * Add file to directory
+   * 
+   * @param file    the file to be added
+   * @param dirName the name of the directory
+   */
+  public void addFileToDir(File file, String dirName) {
+    Directory dir = (Directory) dirs.get(dirName);
+    dir.add(file);
+  }
+
+  /**
+   * List all the directories in the directory list
+   */
+  public void listDir() {
+    for (String dir : dirs.keySet()) {
+      System.out.println(dir);
+    }
   }
 
   /**
@@ -174,112 +223,37 @@ class FileTree<T extends File> {
     }
   }
 
-  /*
-   * -----------------------------------------------------------------------------
-   */
-
-  /**
-   * Gets the Directory object with the specified name from the file system.
-   *
-   * @param directoryName The name of the directory to retrieve.
-   * @return The Directory object if found, or null if the directory is not found.
-   * @throws Exception if the directory is not found.
-   */
-  public Directory getDirectory(String directoryName) throws Exception {
+  public boolean chkFileExists(String name) throws Exception {
     for (T file : tree.values()) {
-      if (dfsSearch(file, directoryName, null) && file.Is_dir() && file.getName().equals(directoryName)) {
-        return (Directory) file;
-      }
-     else{
-      
-    }
-    }
-
-    throw new Exception("Directory not found");
-  }
-
-  private File findFile(File dir, String name) throws Exception {
-    // base case
-    // check if the current directory (also file) is the file we are looking for
-    if (dir.getName().equals(name)) {
-      return dir;
-    }
-
-    if (dir.Is_dir()) {
-      for (File f : ((Directory) dir).getContainer()) {
-       findFile(f, name);
-      }
-    }
-
-    throw new Exception("File not found");
-  }
-
-  /**
-   * Gets the file object with the specified name from the file system.
-   *
-   * @param fileName The name of the file to retrieve.
-   * @return The file object if found, or null if the directory is not found.
-   * @throws Exception if the file is not found.
-   */
-  public File getFile(String fileName) throws Exception {
-    // go through all the files in the file system
-    for (File file : tree.values()) {
-
-      // check if file exists
-      if (dfsSearch(file, fileName, null)) {
-        if (file.getName().equals(fileName)) {
-          return file;
-        } else {
-          // recursively search directory
-          return findFile(file, fileName);
-        }
-      }
-    }
-    throw new Exception("File not found");
-  }
-
-  /**
-   * Moves a file or directory to a new directory in the file system.
-   *
-   * @param movingFile     The file or directory to move.
-   * @param destinationDir The directory to which the file or directory will be
-   *                       moved to.
-   * @throws Exception if the file or directory is not found.
-   */
-  public void move(String movingFile, String destinationDir) throws Exception {
-    File moveItem = getFile(movingFile);
-    Directory destination = getDirectory(destinationDir);
-    this.delete(moveItem.getName());
-    destination.add(moveItem);
-  }
-
-  /**
-   * Checks if a directory with the specified name exists in the file system.
-   *
-   * @param directoryName The name of the directory to check.
-   * @return True if the directory exists, false otherwise.
-   */
-  public boolean doesDirectoryExist(String directoryName) {
-    for (T file : tree.values()) {
-      if (file.Is_dir() && file.getName().equals(directoryName)) {
+      if (dfsSearch(file, name, null)) {
         return true;
       }
     }
+
     return false;
   }
 
   /**
-   * Checks if a file with the specified name exists in the file system.
-   *
-   * @param directoryName The name of the file to check.
-   * @return True if the file exists, false otherwise.
+   * Moves a file/directory from one directory to another.
+   * 
+   * @param filename the name of the file/directory to move.
+   * @param dirName  the name of the destination directory.
    */
-  public boolean doesFileExist(String directoryName) {
-    for (File file : tree.values()) {
-      if (dfsSearch(file, directoryName, null) && file.getName().equals(directoryName)) {
-        return true;
-      }
+  public void move(String filename, String dirName) throws Exception {
+    if (!chkFileExists(filename)) {
+      throw new Exception("File does not exist");
     }
-    return false;
+
+    // check if the directory exists
+    if (!dirExists(dirName)) {
+      throw new Exception("Directory does not exist");
+    }
+
+    // remove the file/directory from the file system
+    delete(filename);
+
+    // add the file/directory to the destination directory
+    Directory dir = (Directory) dirs.get(dirName);
+    dir.add(new File(filename));
   }
 }

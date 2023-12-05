@@ -1,5 +1,16 @@
 import java.util.Scanner;
 
+/**
+ * The main class allows the user to interact with the file system.
+ * 
+ * @author Tchio Sekale Thierry Steve
+ * @author Priscile Nkenmeza Nzonbi
+ * @author David Saah Abeku
+ * @author John Anatsui Edem
+ * 
+ * @since 2023-12-01
+ * @version 1.0
+ */
 class Main {
 
   /**

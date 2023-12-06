@@ -200,7 +200,7 @@ class Main {
             System.exit(0);
 
           default:
-            System.out.println("Invalid choice, please select a valid entry between 1 - 7");
+            System.out.println("Invalid choice, please select a valid entry between 1 - 8");
         }
       } catch (Exception e) {
         System.out.println(e.getMessage());
